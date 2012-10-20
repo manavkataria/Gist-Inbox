@@ -2,6 +2,7 @@
 
     /* Global Variables */
     var deleteMode = false;
+    var borderColor = 'blue';
     
     //json parsing
     function jsonparse() {
@@ -23,6 +24,14 @@
     $('#myCanvasContainer').on('contextmenu', '#myCanvas', function(e){ 
         //toggle delete mode
         deleteMode = !deleteMode;
+        if (deleteMode) {
+          borderColor = 'red';
+        } else {
+          borderColor = 'blue';
+        }        
+
+        drawCloud();
+          
         //Toggle Cursor to Indicate deleteMode        
         console.log(deleteMode);
 
@@ -51,6 +60,7 @@
       console.log(event.which);
       console.log($(this).text());
 
+
       if (deleteMode) {
         $(this).remove();
         drawCloud();
@@ -62,7 +72,7 @@
    function drawCloud() {
     if(!$('#myCanvas').tagcanvas({
       textColour: '#ff0000',
-      outlineColour: '#ff00ff',
+      outlineColour: borderColor,
       weightMode: 'both',
       weightGradient:  {
         0:    '#f00', // red
