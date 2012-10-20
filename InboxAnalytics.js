@@ -1,4 +1,7 @@
  $(document).ready(function() {
+
+    /* Global Variables */
+    var deleteMode = false;
     
     //json parsing
     function jsonparse() {
@@ -18,6 +21,11 @@
 
     // Canvas Right Click:
     $('#myCanvasContainer').on('contextmenu', '#myCanvas', function(e){ 
+        //toggle delete mode
+        deleteMode = !deleteMode;
+        //Toggle Cursor to Indicate deleteMode        
+        console.log(deleteMode);
+
         console.log(event.which);   
         return false; 
     });
@@ -39,10 +47,15 @@
         default:
             //alert('You have a strange mouse');
       }
-        console.log(event.which);
-        console.log($(this).text());
+     
+      console.log(event.which);
+      console.log($(this).text());
+
+      if (deleteMode) {
         $(this).remove();
         drawCloud();
+      }
+
     });
 
     //Draw Tag Cloud
