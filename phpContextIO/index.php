@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-    <title>Inbox Analytics</title>
+    <title>Inbox Analytics > Sender Metrics </title>
     <!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="jquery.tagcanvas.min.js" type="text/javascript"></script>
@@ -40,8 +40,8 @@ $args = array('folder'=>"Inbox", 'limit'=>10);
 
 $r = $contextIO->listMessages($accountId, $args);
 foreach ($r->getData() as $message) {
-	$subject = $subject . " " . $message['subject'] . "<br>";
-	$from = $from . " " . $message['addresses']['from']['email'] . "<br>";
+	$subject = $subject . " " . $message['subject'];
+	$from = $from . " " . $message['addresses']['from']['email'];
 	//echo "Body   : ".$message['body']."<br>";
 }
 
@@ -84,7 +84,7 @@ function getTags($dic) {
 	foreach ($dic as $keyword=>$count) {
 	//$property . " is " . $value . "<br>");
 	//<li><a href="http://www.goat1000.com/fish">Fish</a></li>
-		$tags = $tags . '<li> <a style="font-size: ' . $count*10 . 'pt" href="#">' . $keyword . "</a></li>";
+		$tags = $tags . '<li> <a style="font-size: ' . $count*10 . 'pt" href="getData.php?email='. $keyword .'">' . $keyword . "</a></li>";
 	}
 	return $tags;
 }
@@ -94,7 +94,9 @@ $tags = getTags($from_dic);
 ?>
 
   <body>
-    <h1>InboxAnalytics</h1>
+    <h1 align="center">Inbox Analytics</h1>
+    <h2 align="center">Sender Metrics</h2>
+    
     <div id="myCanvasContainer" align="center">
       <canvas align="center" width="600" height="400" id="myCanvas" style="border: 1px solid black">
         <p>Unable to display Tag Cloud! Your browser does not support the canvas element!</p>
@@ -115,26 +117,6 @@ $(document).ready(function() {
   /* Global Variables */
     var deleteMode = false;
     var borderColor = 'blue';
-    
-    //json parsing
-    function jsonparse() {
-        var jsonp = '[{"keyword":"C", "count":20}, {"keyword":"JavaScript","count":40}, {"keyword":"Java","count":20}, {"keyword":"Python","count":30}]';
-        var lang = '<ul>';
-        var obj = $.parseJSON(jsonp);
-        $.each(obj, function() {
-
-            lang += '<li><a style="font-size: ' + this['count'] + 'pt" href="#">' + this['keyword'] + "</a></li>";
-        });
-        lang += '</ul>';
-
-        $('#tags').html(lang);
-    }
-  /*
-			<script language="javascript" type="text/javascript">
-			var str = '<?php echo $tags; ?>';
-			document.write(str);
-  */
-    //jsonparse();
 
     var lang = '<ul>';
     lang += '<?php echo $tags; ?>';
@@ -162,7 +144,7 @@ $(document).ready(function() {
 
     //Click Handler for tags 
     $("#tags a").click(function(event) {
-      event.preventDefault();
+      //event.preventDefault();
 
       switch (event.which) {
         case 1:
@@ -180,7 +162,6 @@ $(document).ready(function() {
      
       console.log(event.which);
       console.log($(this).text());
-
 
       if (deleteMode) {
         $(this).remove();
