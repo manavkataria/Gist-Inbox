@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>#ziphash - Hashtag automation for Twitter superusers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+    </style>
+    <link href="/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">ziphash</a>
+          <div class="btn-group pull-right">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+              <i class="icon-user"></i> <%= twitterScreenName %>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="/logout">Sign Out</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="span4 offset4">
+        <h2>Let's do this!</h2>
+        <form action="/tweet" method="post">
+          <input  type="text" 
+                  id="txtHashtags" 
+                  name="txtHashtags" 
+                  placeholder="gimme some #hashtags" 
+                  value="<%= (currentHashtags) ? currentHashtags : '' %>" />
+          <br/><textarea rows="3" id="txtTweet" name="txtTweet" ></textarea>
+          <br /><span id="message">Length:</span> <span id="charCounter" style="font-weight: bold;color: green;">0</span>.
+          <p><button id="btnTweet" type="submit" class="btn">Tweet</button></p>
+        </form>
+      </div> <!-- span -->
+
+    </div> <!-- container -->
+  
+      <% include footer %> 
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/js/jquery.js"></script>
+    <script src="/js/counter.js"></script>
+    <script src="/js/bootstrap-transition.js"></script>
+    <script src="/js/bootstrap-alert.js"></script>
+    <script src="/js/bootstrap-modal.js"></script>
+    <script src="/js/bootstrap-dropdown.js"></script>
+    <script src="/js/bootstrap-scrollspy.js"></script>
+    <script src="/js/bootstrap-tab.js"></script>
+    <script src="/js/bootstrap-tooltip.js"></script>
+    <script src="/js/bootstrap-popover.js"></script>
+    <script src="/js/bootstrap-button.js"></script>
+    <script src="/js/bootstrap-collapse.js"></script>
+    <script src="/js/bootstrap-carousel.js"></script>
+    <script src="/js/bootstrap-typeahead.js"></script>
+
+  </body>
+</html>
