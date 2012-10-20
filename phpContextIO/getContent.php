@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-    <title>Gist 4 Fun</title>
+    <title>Inbox Analytics</title>
     <!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="jquery.tagcanvas.min.js" type="text/javascript"></script>
@@ -13,10 +13,8 @@
 <?php
 
 include_once("class.contextio.php");
-$subject = null;
-$sub_dic = array();
-$from = null;
-$from_dic = array();
+$body = null;
+$body_dic = array();
 
 // see https://console.context.io/#settings to get your consumer key and consumer secret.
 $contextIO = new ContextIO('v0mwy4ku','w6nhu3KVcUc0c3y4');
@@ -35,29 +33,48 @@ if (is_null($accountId)) {
 	die;
 }
 
+$searchWord = $_GET['word'];
+//$searchWord = '/for/';
+//$searchEmail = 'noreply@github.com';
 
-$args = array('folder'=>"Inbox", 'limit'=>10);
+//$args = array('folder'=>"Inbox", 'subject' => '/reset/', 'limit'=>1,  'include_body' => 1);
+$args = array('folder'=>"Inbox", 'subject' => "/". $searchWord ."/" , 'limit'=>2, 'include_body' => 1);
+//$args = array('folder'=>"Inbox", 'subject' => "/" . $searchWord . "/", 'limit'=>3, 'include_body' => 1);
 
+//echo $searchWord;
 $r = $contextIO->listMessages($accountId, $args);
+
+
+if ( $r->getData() == null ) {
+	//echo strtoupper($searchWord);
+	$args = array('subject' => strtoupper($searchWord), 'limit'=>3);
+	$r = $contextIO->listMessages($accountId, $args);
+	if( $r->getData() == null ) {
+		echo "No Results !";
+		exit(0);
+	}
+}
+	
 foreach ($r->getData() as $message) {
-	$subject = $subject . " " . $message['subject'];
-	$from = $from . " " . $message['addresses']['from']['email'];
-	//echo "Body   : ".$message['body']."<br>";
+	$body = $body . " " . $message['body'][0]['content'];
+	//print_r($message['body'][0]['content']);
+	//$from = $from . " " . $message['addresses']['from']['email'];
+	//echo "Body   : ".$message['body'][0]['content']."<br>";
 }
 
-$subject = formatText($subject);
-$sub_dic = getDic($subject);
-unset($sub_dic[' ']);
-arsort($sub_dic);
+$body = formatText($body);
+$body_dic = getDic($body);
+unset($body_dic[' ']);
+arsort($body_dic);
 //print_r($sub_dic);
 
-$from_dic = getDic($from);
-unset($from_dic[' ']);
-arsort($from_dic);
+//$from_dic = getDic($from);
+//unset($from_dic[' ']);
+//arsort($from_dic);
 //print_r($from_dic);
 
 echo "<br>";
-//	print_r($frequency);
+//print_r($frequency);
 
 function formatText($text) {
 	return preg_replace('/[^a-zA-Z]/i', ' ', $text);
@@ -82,24 +99,27 @@ function getDic($words) {
 function getTags($dic) {
 	$tags = ""; 
 	foreach ($dic as $keyword=>$count) {
-	//$property . " is " . $value . "<br>");
-	//<li><a href="http://www.goat1000.com/fish">Fish</a></li>
-		$tags = $tags . '<li> <a style="font-size: ' . $count*10 . 'pt" href="getData.php?email='. $keyword .'">' . $keyword . "</a></li>";
-	}
+  	//$property . " is " . $value . "<br>");
+  	//<li><a href="http://www.goat1000.com/fish">Fish</a></li>
+
+     if ($count > 0 && strlen($keyword)>3 ) {
+  		 $tags = $tags . '<li> <a style="font-size: ' . $count*7 . 'pt" href="#">' . $keyword . "</a></li>";
+  	}
+  }
 	return $tags;
 }
-$tags = getTags($from_dic);
+$tags = getTags($body_dic);
 
 //print($tags);
 ?>
 
   <body>
     <h1 align="center">Gist 4 Fun</h1>
-    <h2 align="center">Inbox Metrics</h2>
-    <h3 align="center">Sender Metrics</h3>
+    <h2 align="center">word: <?php echo $searchWord ?></h2>
+    <h3 align="center">Body Metrics</h3>
     
     <div id="myCanvasContainer" align="center">
-      <canvas align="center" width="600" height="400" id="myCanvas">
+      <canvas align="center" width="600" height="400" id="myCanvas" style="border: 1px solid black">
         <p>Unable to display Tag Cloud! Your browser does not support the canvas element!</p>
       </canvas>
     </div>
@@ -186,7 +206,7 @@ $(document).ready(function() {
       reverse: true,
       depth: 0.8,
       weight: true,
-      maxSpeed: 0.02
+      maxSpeed: 0.03
     },'tags')) {
       // something went wrong, hide the canvas container
       $('#myCanvasContainer').hide();
@@ -197,7 +217,6 @@ $(document).ready(function() {
  });
 
   </script>
-  
-	</body>
+</body>
 </html>
 

@@ -35,13 +35,15 @@ if (is_null($accountId)) {
 	die;
 }
 
+$searchEmail = $_GET['email'];
+//$searchEmail = 'noreply@github.com';
 
-$args = array('folder'=>"Inbox", 'limit'=>10);
+$args = array('folder'=>"Inbox", 'from' => $searchEmail, 'limit'=>10);
 
 $r = $contextIO->listMessages($accountId, $args);
 foreach ($r->getData() as $message) {
 	$subject = $subject . " " . $message['subject'];
-	$from = $from . " " . $message['addresses']['from']['email'];
+	//$from = $from . " " . $message['addresses']['from']['email'];
 	//echo "Body   : ".$message['body']."<br>";
 }
 
@@ -51,13 +53,13 @@ unset($sub_dic[' ']);
 arsort($sub_dic);
 //print_r($sub_dic);
 
-$from_dic = getDic($from);
-unset($from_dic[' ']);
-arsort($from_dic);
+//$from_dic = getDic($from);
+//unset($from_dic[' ']);
+//arsort($from_dic);
 //print_r($from_dic);
 
 echo "<br>";
-//	print_r($frequency);
+//print_r($frequency);
 
 function formatText($text) {
 	return preg_replace('/[^a-zA-Z]/i', ' ', $text);
@@ -82,22 +84,25 @@ function getDic($words) {
 function getTags($dic) {
 	$tags = ""; 
 	foreach ($dic as $keyword=>$count) {
-	//$property . " is " . $value . "<br>");
-	//<li><a href="http://www.goat1000.com/fish">Fish</a></li>
-		$tags = $tags . '<li> <a style="font-size: ' . $count*10 . 'pt" href="getData.php?email='. $keyword .'">' . $keyword . "</a></li>";
+  	//$property . " is " . $value . "<br>");
+  	//<li><a href="http://www.goat1000.com/fish">Fish</a></li>
+    if ($count > 0 && strlen($keyword)>3 ) {
+      $tags = $tags . '<li> <a style="font-size: ' . $count*10 . 'pt" href="getContent.php?word='. $keyword .'">' . $keyword . "</a></li>";    
+    }
 	}
 	return $tags;
 }
-$tags = getTags($from_dic);
+$tags = getTags($sub_dic);
 
 //print($tags);
 ?>
 
   <body>
+ 
     <h1 align="center">Gist 4 Fun</h1>
-    <h2 align="center">Inbox Metrics</h2>
-    <h3 align="center">Sender Metrics</h3>
-    
+    <h2 align="center">from: <?php echo $searchEmail ?></h2>
+    <h3 align="center">Conent Metrics</h3>
+
     <div id="myCanvasContainer" align="center">
       <canvas align="center" width="600" height="400" id="myCanvas">
         <p>Unable to display Tag Cloud! Your browser does not support the canvas element!</p>
@@ -145,7 +150,8 @@ $(document).ready(function() {
 
     //Click Handler for tags 
     $("#tags a").click(function(event) {
-      //event.preventDefault();
+      if (deleteMode) 
+        event.preventDefault();
 
       switch (event.which) {
         case 1:
