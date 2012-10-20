@@ -1,11 +1,5 @@
  $(document).ready(function() {
-        
-    //Click Handler for tags 
-    $("#tags a").click(function() {
-        console.log($(this).text());
-    });
-
-
+    
     //json parsing
     function jsonparse() {
         var jsonp = '[{"keyword":"C", "count":20}, {"keyword":"JavaScript","count":40}, {"keyword":"Java","count":20}, {"keyword":"Python","count":30}]';
@@ -22,7 +16,37 @@
 
     jsonparse();
 
-   //Draw Tag Cloud
+    // Canvas Right Click:
+    $('#myCanvasContainer').on('contextmenu', '#myCanvas', function(e){ 
+        console.log(event.which);   
+        return false; 
+    });
+
+    //Click Handler for tags 
+    $("#tags a").click(function(event) {
+      event.preventDefault();
+
+      switch (event.which) {
+        case 1:
+            //alert('Left mouse button pressed');
+            break;
+        case 2:
+            //alert('Middle mouse button pressed');
+            break;
+        case 3:
+            //alert('Right mouse button pressed');
+            break;
+        default:
+            //alert('You have a strange mouse');
+      }
+        console.log(event.which);
+        console.log($(this).text());
+        $(this).remove();
+        drawCloud();
+    });
+
+    //Draw Tag Cloud
+   function drawCloud() {
     if(!$('#myCanvas').tagcanvas({
       textColour: '#ff0000',
       outlineColour: '#ff00ff',
@@ -36,11 +60,12 @@
       reverse: true,
       depth: 0.8,
       weight: true,
-      maxSpeed: 0.05
+      maxSpeed: 0.03
     },'tags')) {
       // something went wrong, hide the canvas container
       $('#myCanvasContainer').hide();
     }
+   }
 
-
+   drawCloud();
 });
