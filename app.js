@@ -1,4 +1,5 @@
 var express = require( 'express' );
+var async = require( 'async' );
 // var OAuth= require( 'oauth' ).OAuth;
 var util = require('util'),
       ImapConnection = require('imap').ImapConnection;
@@ -29,28 +30,45 @@ function openInbox(cb) {
   });
 }
 
-openInbox(function(err, mailbox) {
-  if (err) die(err);
-  imap.search([ 'UNSEEN', ['SINCE', 'May 20, 2010'] ], function(err, results) {
-    if (err) die(err);
-    var fetch = imap.fetch(results, {
-      request: {
-        headers: ['from', 'to', 'subject', 'date']
+
+
+function createCloudData( objRaw, callback ){
+  // do some work to create the 
+  // JSON object for the client
+
+  // {
+  //       "keyword1": 20,
+  //       "keyword2": 10,
+  //       "keyword3": 20
+  // }
+  var clientData = [];
+  async.forEach(
+    objRaw
+    , function( objEmail, cb ){
+
+      var thisSubject = objEmail.subject[ 0 ];
+      // console.log( thisSubject );
+      var arrWords = thisSubject.split( ' ' );
+
+      // now we have the array of words 
+      // in the subject of the email
+      for(var i=0; i<arrWords.length; i++ ){
+        // console.log( arrWords[i] );
+        if (clientData[arrWords[i]]) {
+          clientData[arrWords[i]]++;
+          // console.log( clientData[arrWords[i]] );
+        } else {
+          clientData[arrWords[i]] = 1;
+          // console.log( clientData[arrWords[i]] );
+        }
       }
-    });
-    fetch.on('message', function(msg) {
-      // console.log('Got a message with sequence number ' + msg.seqno);
-      msg.on('end', function() {
-        // msg.headers is now an object containing the requested headers ...
-        dataDump.unshift( msg.headers ) ;
-      });
-    });
-    fetch.on('end', function() {
-      // console.log('Done fetching all messages!');
-      imap.logout();
-    });
-  });
-});
+      cb();
+
+    }
+    , function(err){callback( null, clientData );}
+    );
+
+}
 
 var app = express();
 app.configure(function() {
@@ -96,13 +114,44 @@ app.get('/', function(req, res) {
   // console.log( 'currentHashtags: ' + currentHashtags );
 
 
-    destination_page = 'hero';
+openInbox(function(err, mailbox) {
+  if (err) die(err);
+  imap.search([ 'UNSEEN', ['SINCE', 'May 20, 2010'] ], function(err, results) {
+    if (err) die(err);
+    var fetch = imap.fetch(results, {
+      request: {
+        headers: ['from', 'to', 'subject', 'date']
+      }
+    });
+    fetch.on('message', function(msg) {
+      console.log('Got a message with sequence number ' + msg.seqno);
+      msg.on('end', function() {
+        // msg.headers is now an object containing the requested headers ...
+        dataDump.unshift( msg.headers ) ;
+      });
+    });
+    fetch.on('end', function() {
+      console.log('Done fetching all messages!');
+      createCloudData( dataDump, function( err, reply ){
+        dataDump = reply;
+        console.log( 'here is the JSON object: ' + util.inspect( dataDump ) );
+        imap.logout();
 
+        dataDump = '\'' + util.inspect( dataDump ) + '\'';
+        destination_page = 'hero';
 
-  res.render( destination_page, {
-    dataDump: dataDump  
+        res.render( destination_page, {
+          dataDump: dataDump  
+        });
+      });
+      
+    });
   });
 });
+
+
+});
+
 
 // app.get('/auth/twitter', function(req, res){
 //   // check the sessionID

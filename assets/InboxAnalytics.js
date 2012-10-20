@@ -3,7 +3,20 @@
     /* Global Variables */
     var deleteMode = false;
     var borderColor = 'blue';
-  
+    
+    //json parsing
+    function jsonparse() {
+        var jsonp = '[{"keyword":"C", "count":20}, {"keyword":"JavaScript","count":40}, {"keyword":"Java","count":20}, {"keyword":"Python","count":30}]';
+        var lang = '<ul>';
+        var obj = $.parseJSON(jsonp);
+        $.each(obj, function() {
+
+            lang += '<li><a style="font-size: ' + this['count'] + 'pt" href="#">' + this['keyword'] + "</a></li>";
+        });
+        lang += '</ul>';
+
+        $('#tags').html(lang);
+    }
 
     jsonparse();
 
