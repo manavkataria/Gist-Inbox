@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TagCanvas jQuery example</title>
+    <title>InboxAnalytics Tag Cloud Demo</title>
     <!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
      <script src="jquery.tagcanvas.js" type="text/javascript"></script>
     <!--
     <script src="jquery.tagcanvas.min.js" type="text/javascript"></script>
     -->
+
     <script type="text/javascript">
+      
       $(document).ready(function() {
         if(!$('#myCanvas').tagcanvas({
           textColour: '#ff0000',
           outlineColour: '#ff00ff',
+          weightMode: 'both',
+          weightGradient:  {
+            0:    '#f00', // red
+            0.33: '#ff0', // yellow
+            0.66: '#0f0', // green
+            1:    '#00f'  // blue
+          },
           reverse: true,
           depth: 0.8,
           weight: true,
@@ -25,9 +34,9 @@
     </script>
   </head>
   <body>
-    <h1>TagCanvas jQuery example page</h1>
-    <div id="myCanvasContainer">
-      <canvas width="300" height="300" id="myCanvas">
+    <h1>InboxAnalytics</h1>
+    <div id="myCanvasContainer" align="center" style="border: 1px solid black">
+      <canvas align="center" width="400" height="400" id="myCanvas">
         <p>Anything in here will be replaced on browsers that support the canvas element</p>
       </canvas>
     </div>
