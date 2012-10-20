@@ -6,8 +6,8 @@ var util = require('util'),
 var dataDump = [];
 
 var imap = new ImapConnection({
-      username: 'james@site-now.com',
-      password: 'RKl7uAsUzGQIK5xrxlLi',
+      username: 'jobhuntertexashack@gmail.com',
+      password: 'texashack',
       host: 'imap.gmail.com',
       port: 993,
       secure: true
@@ -100,7 +100,7 @@ app.get('/', function(req, res) {
 
 
   res.render( destination_page, {
-    dataDump: dataDump
+    dataDump: dataDump  
   });
 });
 
