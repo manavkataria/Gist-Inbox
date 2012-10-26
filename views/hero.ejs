@@ -9,14 +9,14 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 60px;
         padding-bottom: 40px;
       }
     </style>
-    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -40,7 +40,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">ziphash</a>
+          <a class="brand" href="#">InboxAnalytics</a>
           <div class="nav-collapse">
             <!-- <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
@@ -89,22 +89,22 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap-transition.js"></script>
-    <script src="js/bootstrap-alert.js"></script>
-    <script src="js/bootstrap-modal.js"></script>
-    <script src="js/bootstrap-dropdown.js"></script>
-    <script src="js/bootstrap-scrollspy.js"></script>
-    <script src="js/bootstrap-tab.js"></script>
-    <script src="js/bootstrap-tooltip.js"></script>
-    <script src="js/bootstrap-popover.js"></script>
-    <script src="js/bootstrap-button.js"></script>
-    <script src="js/bootstrap-collapse.js"></script>
-    <script src="js/bootstrap-carousel.js"></script>
-    <script src="js/bootstrap-typeahead.js"></script>
+    <script src="../assets/js/jquery.js"></script>
+    <script src="../assets/js/bootstrap-transition.js"></script>
+    <script src="../assets/js/bootstrap-alert.js"></script>
+    <script src="../assets/js/bootstrap-modal.js"></script>
+    <script src="../assets/js/bootstrap-dropdown.js"></script>
+    <script src="../assets/js/bootstrap-scrollspy.js"></script>
+    <script src="../assets/js/bootstrap-tab.js"></script>
+    <script src="../assets/js/bootstrap-tooltip.js"></script>
+    <script src="../assets/js/bootstrap-popover.js"></script>
+    <script src="../assets/js/bootstrap-button.js"></script>
+    <script src="../assets/js/bootstrap-collapse.js"></script>
+    <script src="../assets/js/bootstrap-carousel.js"></script>
+    <script src="../assets/js/bootstrap-typeahead.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="jquery.tagcanvas.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="../assets/js/jquery.tagcanvas.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/css/style.css" />
     <script type>
 
   $(document).ready(function() {
@@ -115,8 +115,6 @@
     
     //json parsing
     function jsonparse() {
-        
-        var jsonp = <%= dataDump %>;
         // var jsonp = '[{"keyword":"C", "count":20}, {"keyword":"JavaScript","count":40}, {"keyword":"Java","count":20}, {"keyword":"Python","count":30}]';
         var lang = '<ul>';
         var obj = $.parseJSON(jsonp);
@@ -128,8 +126,23 @@
 
         $('#tags').html(lang);
     }
+    //jsonparse();
 
-    jsonparse();
+    function parseDictionary(obj){
+      //var obj = {abc: 5, mc: 34};
+      var lang = '<ul>';
+        
+      for (var key in obj) {
+        var value = obj[key];
+        lang += '<li><a style="font-size: ' + value*10 + 'pt" href="#">' + key + "</a></li>";
+      }
+
+      lang += '</ul>';
+      $('#tags').html(lang);
+    }
+    
+    var message = <%= dataDump %>;
+    parseDictionary(myData);
 
     // Canvas Right Click:
     $('#myCanvasContainer').on('contextmenu', '#myCanvas', function(e){ 
