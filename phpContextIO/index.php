@@ -5,12 +5,11 @@
     <!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="jquery.tagcanvas.min.js" type="text/javascript"></script>
-    <link href="light.css" type="text/css" rel="stylesheet">
-	  
     <link rel="stylesheet" type="text/css" href="style.css" />
 
 </head>
 <?php
+
 
 include_once("class.contextio.php");
 $subject = null;
@@ -19,7 +18,8 @@ $from = null;
 $from_dic = array();
 
 // see https://console.context.io/#settings to get your consumer key and consumer secret.
-$contextIO = new ContextIO('v0mwy4ku','w6nhu3KVcUc0c3y4');
+$contextIO = new ContextIO('tx5dlne2','TWepndqvhreGYrDa');
+//$contextIO = new ContextIO('v0mwy4ku','w6nhu3KVcUc0c3y4'); //Vijay
 $accountId = null;
 
 // list your accounts
@@ -35,8 +35,29 @@ if (is_null($accountId)) {
 	die;
 }
 
+/*  Allow Users to Add Their Account */
 
-$args = array('folder'=>"Inbox", 'limit'=>10);
+$new_email = $_GET["email"];
+echo "Hello <strong> $new_email, </strong>";
+
+$args = array('callback_url'=>"http://playlucid.com/Gist/success.php", 'email'=>$new_email);
+
+$r = $contextIO->addConnectToken($accountId, $args);
+
+foreach ($r->getData() as $key => $value) {
+  
+  if ($key == "browser_redirect_url") {
+    echo "<br>";
+    echo "<a href='$value' target='_blank'>Add <strong> $new_email </strong> to Gist</a>";
+  } else {
+    //echo "<br>";
+    //echo "<strong> ". $key ."</strong>: " . $value;
+  }
+}
+
+/* - END -  Allow Users to Add Their Account */
+
+$args = array('folder'=>"Inbox", 'limit'=>11);
 
 $r = $contextIO->listMessages($accountId, $args);
 foreach ($r->getData() as $message) {

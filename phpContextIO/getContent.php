@@ -5,8 +5,7 @@
     <!--[if lt IE 9]><script type="text/javascript" src="excanvas.js"></script><![endif]-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="jquery.tagcanvas.min.js" type="text/javascript"></script>
-    <link href="light.css" type="text/css" rel="stylesheet">
-	  
+    
     <link rel="stylesheet" type="text/css" href="style.css" />
 
 </head>
@@ -17,7 +16,8 @@ $body = null;
 $body_dic = array();
 
 // see https://console.context.io/#settings to get your consumer key and consumer secret.
-$contextIO = new ContextIO('v0mwy4ku','w6nhu3KVcUc0c3y4');
+//$contextIO = new ContextIO('v0mwy4ku','w6nhu3KVcUc0c3y4');
+$contextIO = new ContextIO('tx5dlne2','TWepndqvhreGYrDa');
 $accountId = null;
 
 // list your accounts
@@ -38,7 +38,7 @@ $searchWord = $_GET['word'];
 //$searchEmail = 'noreply@github.com';
 
 //$args = array('folder'=>"Inbox", 'subject' => '/reset/', 'limit'=>1,  'include_body' => 1);
-$args = array('folder'=>"Inbox", 'subject' => "/". $searchWord ."/" , 'limit'=>2, 'include_body' => 1);
+$args = array('folder'=>"Inbox", 'subject' => "/". $searchWord ."/i" , 'limit'=>2, 'include_body' => 1);
 //$args = array('folder'=>"Inbox", 'subject' => "/" . $searchWord . "/", 'limit'=>3, 'include_body' => 1);
 
 //echo $searchWord;

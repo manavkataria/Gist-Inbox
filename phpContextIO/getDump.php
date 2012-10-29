@@ -34,7 +34,7 @@ if (is_null($accountId)) {
 }
 
 //$searchWord = $_GET['word'];
-$searchWord = '/Xoom/';
+$searchWord = '/Xoom/i';
 //$searchEmail = 'noreply@github.com';
 
 //$args = array('folder'=>"Inbox", 'subject' => '/reset/', 'limit'=>1,  'include_body' => 1);
